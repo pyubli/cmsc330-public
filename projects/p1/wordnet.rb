@@ -23,11 +23,22 @@ class Synsets
     end
 
     def lookup(synset_id)
-        raise Exception, "Not implemented"
+        if @h.has_key?(synset_id) == false then
+            return nil
+        else
+            return @h.values_at(synset_id)
+        end
     end
 
     def findSynsets(to_find)
-        raise Exception, "Not implemented"
+        if to_find.is_a?(String) == true then
+            return @h.select { |keys, values| values == to_find}.keys
+        elsif to_find.is_a?(Array) == true then
+            found = Hash.try_convert(to_find)
+            return found.each_key { |key| @h.select { |keys, values| values == key}.keys}
+        else
+            return nil
+        end
     end
 end
 
