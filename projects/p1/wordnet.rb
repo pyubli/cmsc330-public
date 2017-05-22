@@ -2,7 +2,7 @@ require_relative "graph.rb"
 
 class Synsets
     def initialize
-        @h = Hash.new
+        @s = Hash.new
     end
 
     def load(synsets_file)
@@ -14,28 +14,28 @@ class Synsets
     end
 
     def addSet(synset_id, nouns)
-        if synset_id < 0 || nouns == nil || @h.has_key?(synset_id) == true then
+        if synset_id < 0 || nouns == nil || @s.has_key?(synset_id) == true then
             return false
         else
-            @h[synset_id] = nouns
+            @s[synset_id] = nouns
             return true
         end
     end
 
     def lookup(synset_id)
-        if @h.has_key?(synset_id) == false then
+        if @s.has_key?(synset_id) == false then
             return nil
         else
-            return @h.values_at(synset_id)
+            return @s.values_at(synset_id)
         end
     end
 
     def findSynsets(to_find)
         if to_find.is_a?(String) == true then
-            return @h.select { |keys, values| values == to_find}.keys
+            return @s.select { |keys, values| values == to_find}.keys
         elsif to_find.is_a?(Array) == true then
             found = Hash.try_convert(to_find)
-            return found.each_key { |key| @h.select { |keys, values| values == key}.keys}
+            return found.each_key { |key| @s.select { |keys, values| values == key}.keys}
         else
             return nil
         end
@@ -44,6 +44,7 @@ end
 
 class Hypernyms
     def initialize
+        @h = Array.new
     end
 
     def load(hypernyms_file)
@@ -51,7 +52,11 @@ class Hypernyms
     end
 
     def addHypernym(source, destination)
-        raise Exception, "Not implemented"
+        if source < 0 || destination > 0 || source == destination then
+            return false
+        else
+            return true
+        end
     end
 
     def lca(id1, id2)
