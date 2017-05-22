@@ -2,14 +2,21 @@ require_relative "graph.rb"
 
 class Synsets
     def initialize
+        self = Hash.new
     end
 
     def load(synsets_file)
-        raise Exception, "Not implemented"
+        File.open(synsets_file, "r") do |f|
+            
     end
 
     def addSet(synset_id, nouns)
-        raise Exception, "Not implemented"
+        if synset_id < 0 || nouns == nil || self.has_key?(synset_id) == true then
+            return false
+        else
+            self[synset_id] = nouns
+            return true
+        end
     end
 
     def lookup(synset_id)
