@@ -2,19 +2,22 @@ require_relative "graph.rb"
 
 class Synsets
     def initialize
-        self = Hash.new
+        @h = Hash.new
     end
 
     def load(synsets_file)
         File.open(synsets_file, "r") do |f|
-            
+            f.each_line do |line|
+                puts line
+            end
+        end
     end
 
     def addSet(synset_id, nouns)
-        if synset_id < 0 || nouns == nil || self.has_key?(synset_id) == true then
+        if synset_id < 0 || nouns == nil || @h.has_key?(synset_id) == true then
             return false
         else
-            self[synset_id] = nouns
+            @h[synset_id] = nouns
             return true
         end
     end
