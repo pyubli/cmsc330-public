@@ -45,8 +45,7 @@ class Synsets
         if @s.has_key?(synset_id) == false then
             return nil
         else
-            print @s.values_at(synset_id).to_s.split(','),"\n"#.split(%r{\[\]\,\"\s*})
-            return @s.values_at(synset_id)
+            return @s.values_at(synset_id).shift.to_s.split(',')
         end
     end
 
