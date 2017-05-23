@@ -53,8 +53,8 @@ class Synsets
         if to_find.is_a?(String) == true then
             return @s.select { |keys, values| values == to_find}.keys
         elsif to_find.is_a?(Array) == true then
-            found = Hash.try_convert(to_find)
-            return found.each_key { |key| @s.select { |keys, values| values == key}.keys}
+            puts to_find
+            print @s.invert, "\n"
         else
             return nil
         end
