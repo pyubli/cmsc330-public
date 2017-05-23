@@ -28,17 +28,17 @@ class PublicTests < Minitest::Test
     #     assert_equal([2, 6, 7], @synsets.load($INVALID_SYNSETS)) 
     # end
 
-    def test_public_synsets_lookup
-        @synsets.load($VALID_SYNSETS)
-        assert_equal(["a"], @synsets.lookup(0))
-        assert_equal( ["d", "e"], @synsets.lookup(3).sort)
-    end
-
-    # def test_public_synsets_find
+    # def test_public_synsets_lookup
     #     @synsets.load($VALID_SYNSETS)
-    #     assert_equal([0], @synsets.findSynsets("a"))
-    #     assert_equal({"b" => [1], "e" => [3]}, @synsets.findSynsets(["b", "e"]))
+    #     assert_equal(["a"], @synsets.lookup(0))
+    #     assert_equal( ["d", "e"], @synsets.lookup(3).sort)
     # end
+
+    def test_public_synsets_find
+        @synsets.load($VALID_SYNSETS)
+        assert_equal([0], @synsets.findSynsets("a"))
+        assert_equal({"b" => [1], "e" => [3]}, @synsets.findSynsets(["b", "e"]))
+    end
 
     # def test_public_hypernyms_add
     #     assert_equal(true, @hypernyms.addHypernym(0, 1))
