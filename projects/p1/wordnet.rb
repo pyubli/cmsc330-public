@@ -6,10 +6,29 @@ class Synsets
     end
 
     def load(synsets_file)
+        to_ent = Array.new
+        to_out = Array.new
         File.open(synsets_file, "r") do |f|
             f.each_line do |line|
-                puts line
+                arr = line.split(' ')
+                arr2 = line.chomp.split(/ /)
+                if arr2[0] == "id:" && arr2[2] == "synset:" then
+                    if arr[1].to_i >= 0 then
+                        if @s.has_key?(arr[1].to_i) == false then
+                            to_ent << Array[arr[1], arr[3]]
+                        end
+                    end
+                else
+                    to_out << arr[1].to_i+1
+                end
             end
+        end
+
+        if to_out.empty? == true then
+            to_ent.each_index { |x| self.addSet(to_ent[x][0].to_i, to_ent[x][1])}
+            return nil
+        else
+            return to_out.to_a
         end
     end
 
@@ -26,6 +45,7 @@ class Synsets
         if @s.has_key?(synset_id) == false then
             return nil
         else
+            print @s.values_at(synset_id).to_s.split(','),"\n"#.split(%r{\[\]\,\"\s*})
             return @s.values_at(synset_id)
         end
     end
