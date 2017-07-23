@@ -20,9 +20,9 @@ class PublicTests < Minitest::Test
     #     assert_equal(false, @synsets.addSet(-1, ["invalid"]))
     # end
 
-    # def test_public_synsets_load_valid
-    #     assert_equal(nil, @synsets.load($VALID_SYNSETS))
-    # end
+    def test_public_synsets_load_valid
+        assert_equal(nil, @synsets.load($VALID_SYNSETS))
+    end
 
     # def test_public_synsets_load_invalid
     #     assert_equal([2, 6, 7], @synsets.load($INVALID_SYNSETS)) 
@@ -46,9 +46,9 @@ class PublicTests < Minitest::Test
     #     assert_equal(true, @hypernyms.addHypernym(0, 1))
     # end
 
-    def test_public_hypernyms_load_valid
-        assert_equal(nil, @hypernyms.load($VALID_HYPERNYMS))
-    end
+    # def test_public_hypernyms_load_valid
+    #     assert_equal(nil, @hypernyms.load($VALID_HYPERNYMS))
+    # end
 
     # def test_public_hypernyms_load_invalid
     #     assert_equal([1, 4, 7], @hypernyms.load($INVALID_HYPERNYMS))
