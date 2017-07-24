@@ -48,7 +48,7 @@ class Synsets
 
     # Returns a Bool(ean)
     def addSet(synset_id, nouns)
-        # checks for invalid parameters
+        # returns false if there are any invalid parameters
         return false if synset_id < 0 || nouns.empty? == true || @s.has_key?(synset_id) == true
         @s.store(synset_id, nouns)
         return true
@@ -56,41 +56,59 @@ class Synsets
 
     # Returns an Array
     def lookup(synset_id)
+        # returns nil if the Synset doesn't have 'synset_id'
         return nil if @s.has_key?(synset_id) == false
         return @s.values_at(synset_id).shift
     end
 
     # Returns an Array, a Hash, or nil
     def findSynsets(to_find)
+        # return an Array if 'to_find' is a String
         return Array[@s.key(Array[to_find])] if to_find.is_a?(String) == true
+        # return nil if 'to_find' is neither an Array nor a String
         return nil if to_find.is_a?(String) == false && to_find.is_a?(Array) == false
+        # creates a new Hash using invert to give the original Hash's keys as values and values as keys
         nhash = @s.invert
-        ids = nhash.keys
-        words = nhash.values
+        # creates an Array using Hash's keys function
+        words = nhash.keys
+        # creates an Array using Hash's values function
+        ids = nhash.values
+        # Array variable to keep track of the found words with their keys
         found = Array.new
         i = 0
-        while i < ids.length
-            if ids[i].length > 1 then
+        # iterates through words Array
+        while i < words.length
+            # checks if there are multiple words at any index
+            if words[i].length > 1 then
                 j = 0
-                while j < ids[i].length
-                    found << [ids[i][j], nhash.values_at(ids[i])]
+                # iterates through each word at index 'i'
+                while j < words[i].length
+                    # stores each word at index 'j' with its corresponding key (as an Array) separately
+                    found << [words[i][j], nhash.values_at(words[i])]
                     j += 1
                 end
             else
-                found << [ids[i][0], Array[words[i]]]
+                # stores the word at index 'i' with its corresponding key (as an Array)
+                found << [words[i][0], Array[ids[i]]]
             end
             i += 1
         end
+        # Hash variable to store each index of 'found' to return at end
         fhash = Hash.new
         i = 0
+        # iterates through 'to_find'
         while i < to_find.length
             j = 0
+            # iterates through 'found' Array
             while j < found.length
+                # stores word => key in 'found' at index 'j' if the word at
+                # index 'i' in 'to_find' is the same as the word at index 'j' in 'found'
                 fhash[found[j][0]] = found[j][1] if to_find[i] == found[j][0]
                 j += 1
             end
             i += 1
         end
+        # returns a Hash if 'to_find' is an Array
         return fhash
     end
 end
@@ -100,14 +118,17 @@ class Hypernyms
         @h = Graph.new
     end
 
+    # returns a Bool(ean)
     def load(hypernyms_file)
         raise Exception, "Not implemented"
     end
 
+    # returns an Array or nil
     def addHypernym(source, destination)
         raise Exception, "Not implemented"
     end
 
+    # returns an Array or nil
     def lca(id1, id2)
         raise Exception, "Not implemented"
     end
