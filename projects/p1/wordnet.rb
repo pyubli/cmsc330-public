@@ -36,7 +36,7 @@ class Synsets
                     to_out << tracker
                 end
 
-                tracker = tracker.next
+                tracker += 1
 
             }
         }
@@ -120,19 +120,37 @@ class Hypernyms
 
     # returns an Array or nil
     def load(hypernyms_file)
+        to_ent = Array.new
+        to_out = Array.new
+        tracker = 1
         # Opens 'hypernyms_file' in "r"-ead mode
         File.open(hypernyms_file, "r") { |file|
             # iterates through each line in 'file'
             file.each_line { |line|
                 arr = line.split(' ')
                 arr2 = line.split(/ /)
-                print arr, "\n", arr2, "\n"
                 if arr2[0] == "from:" && arr2[2] == "to:" then
                     if arr[1].to_i >= 0 && arr[1].length == arr[1].to_i.to_s.length then
-
+                        bar = arr[3].to_s.split(',')
+                        to_ent << Array[arr[1],bar] if to_ent.include?(Array[arr[1],bar]) == false
+                    end
+                else
+                    to_out << tracker
                 end
+                tracker += 1
             }
         }
+
+        return to_out.to_a if to_out.empty? == false
+        to_ent.each_index { |x|
+            self.addHypernym(to_ent[x][0].to_i, to_ent[x][1].to_s.to_i) if to_ent[x][1].length == 1
+            if to_ent[x][1].length > 1 then
+                to_ent[x][1].each_index { |y|
+                    self.addHypernym(to_ent[x][0].to_i, to_ent[x][1][y].to_s.to_i)
+                }
+            end
+        }
+        return nil
     end
 
     # returns a Bool(ean)
