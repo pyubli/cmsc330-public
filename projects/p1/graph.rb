@@ -16,7 +16,7 @@ class Graph
     end
 
     def hasVertex?(v)
-        @edges.has_key?
+        @edges.has_key? v
     end
 
     def vertices

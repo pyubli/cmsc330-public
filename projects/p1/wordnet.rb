@@ -13,7 +13,7 @@ class Synsets
         to_out = Array.new
         # int variable to keep track of line numbers
         tracker = 1
-        # opens synsets_file in "r"-ead mode
+        # opens 'synsets_file' in "r"-ead mode
         File.open(synsets_file, "r") { |file|
             # iterates through each line in 'file'
             file.each_line { |line|
@@ -23,7 +23,7 @@ class Synsets
                 arr2 = line.split(/ /)
                 # initial check if line is valid
                 if arr2[0] == "id:" && arr2[2] == "synset:" then
-                    # checks if id in each line is a valid id (e.g. a non-negative integer)
+                    # checks if id in each line is a valid id (i.e. a non-negative integer)
                     if arr[1].length.eql?(arr[1].to_i.to_s.length) then
                         # checks if the synset has the current key
                         if @s.has_key?(arr[1].to_i) == false then
@@ -118,14 +118,35 @@ class Hypernyms
         @h = Graph.new
     end
 
-    # returns a Bool(ean)
+    # returns an Array or nil
     def load(hypernyms_file)
-        raise Exception, "Not implemented"
+        # Opens 'hypernyms_file' in "r"-ead mode
+        File.open(hypernyms_file, "r") { |file|
+            # iterates through each line in 'file'
+            file.each_line { |line|
+                arr = line.split(' ')
+                arr2 = line.split(/ /)
+                print arr, "\n", arr2, "\n"
+                if arr2[0] == "from:" && arr2[2] == "to:" then
+                    if arr[1].to_i >= 0 && arr[1].length == arr[1].to_i.to_s.length then
+
+                end
+            }
+        }
     end
 
-    # returns an Array or nil
+    # returns a Bool(ean)
     def addHypernym(source, destination)
-        raise Exception, "Not implemented"
+        # returns false in the case of invalid or similar parameters (i.e. negative numbers or the same number)
+        return false if source < 0 || destination < 0 || source == destination
+        # adds 'source' to the Hypernym if 'source' is not a vertex in the Hypernym
+        @h.addVertex(source) if @h.hasVertex?(source) == false
+        # adds 'destination' to the Hypernym if 'destination' is not a vertex in the Hypernym
+        @h.addVertex(destination) if @h.hasVertex?(destination) == false
+        # creates an Edge, connecting 'source' and 'destination' together if there doesn't exist
+        # an Edge between 'source' and 'destination'
+        @h.addEdge(source, destination) if @h.hasEdge?(source, destination) == false
+        return true
     end
 
     # returns an Array or nil

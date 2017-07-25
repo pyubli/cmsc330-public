@@ -34,11 +34,11 @@ class PublicTests < Minitest::Test
     #     assert_equal( ["d", "e"], @synsets.lookup(3).sort)
     # end
 
-    def test_public_synsets_find
-        @synsets.load($VALID_SYNSETS)
-        assert_equal([0], @synsets.findSynsets("a"))
-        assert_equal({"b" => [1], "e" => [3]}, @synsets.findSynsets(["b", "e"]))
-    end
+    # def test_public_synsets_find
+    #     @synsets.load($VALID_SYNSETS)
+    #     assert_equal([0], @synsets.findSynsets("a"))
+    #     assert_equal({"b" => [1], "e" => [3]}, @synsets.findSynsets(["b", "e"]))
+    # end
 
     # def test_public_hypernyms_add
     #     assert_equal(true, @hypernyms.addHypernym(0, 1))
@@ -46,9 +46,9 @@ class PublicTests < Minitest::Test
     #     assert_equal(true, @hypernyms.addHypernym(0, 1))
     # end
 
-    # def test_public_hypernyms_load_valid
-    #     assert_equal(nil, @hypernyms.load($VALID_HYPERNYMS))
-    # end
+    def test_public_hypernyms_load_valid
+        assert_equal(nil, @hypernyms.load($VALID_HYPERNYMS))
+    end
 
     # def test_public_hypernyms_load_invalid
     #     assert_equal([1, 4, 7], @hypernyms.load($INVALID_HYPERNYMS))
