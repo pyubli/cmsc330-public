@@ -46,19 +46,19 @@ class PublicTests < Minitest::Test
     #     assert_equal(true, @hypernyms.addHypernym(0, 1))
     # end
 
-    def test_public_hypernyms_load_valid
-        assert_equal(nil, @hypernyms.load($VALID_HYPERNYMS))
-    end
+    # def test_public_hypernyms_load_valid
+    #     assert_equal(nil, @hypernyms.load($VALID_HYPERNYMS))
+    # end
 
     # def test_public_hypernyms_load_invalid
     #     assert_equal([1, 4, 7], @hypernyms.load($INVALID_HYPERNYMS))
     # end
 
-    # def test_public_hypernyms_lca
-    #     @hypernyms.load($VALID_HYPERNYMS)
-    #     assert_equal([3], @hypernyms.lca(0, 1))
-    #     assert_equal([5], @hypernyms.lca(3, 4))
-    # end
+    def test_public_hypernyms_lca
+        @hypernyms.load($VALID_HYPERNYMS)
+        assert_equal([3], @hypernyms.lca(0, 1))
+        assert_equal([5], @hypernyms.lca(3, 4))
+    end
 
     # def test_public_hypernyms_lca_nonode
     #     @hypernyms.load($VALID_HYPERNYMS)

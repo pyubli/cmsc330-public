@@ -24,7 +24,7 @@ class Synsets
                 # initial check if line is valid
                 if arr2[0] == "id:" && arr2[2] == "synset:" then
                     # checks if id in each line is a valid id (i.e. a non-negative integer)
-                    if arr[1].length.eql?(arr[1].to_i.to_s.length) then
+                    if arr[1].to_i.to_s.eql?(arr[1]) == true && arr[1].length.eql?(arr[1].to_i.to_s.length) == true && arr[1].to_i >= 0 then
                         # checks if the synset has the current key
                         if @s.has_key?(arr[1].to_i) == false then
                             # splits the synset into an array delimited by commas (if any)
@@ -122,6 +122,7 @@ class Hypernyms
     def load(hypernyms_file)
         to_ent = Array.new
         to_out = Array.new
+        # int variable to keep track of line numbers
         tracker = 1
         # Opens 'hypernyms_file' in "r"-ead mode
         File.open(hypernyms_file, "r") { |file|
@@ -130,9 +131,11 @@ class Hypernyms
                 arr = line.split(' ')
                 arr2 = line.split(/ /)
                 if arr2[0] == "from:" && arr2[2] == "to:" then
-                    if arr[1].to_i >= 0 && arr[1].length == arr[1].to_i.to_s.length then
+                    if arr[1].to_i.to_s.eql?(arr[1]) == true && arr[1].to_i.to_s.length.eql?(arr[1].length) == true && arr[1].to_i >= 0 then
                         bar = arr[3].to_s.split(',')
                         to_ent << Array[arr[1],bar] if to_ent.include?(Array[arr[1],bar]) == false
+                    else
+                        to_out << tracker
                     end
                 else
                     to_out << tracker
@@ -142,9 +145,11 @@ class Hypernyms
         }
 
         return to_out.to_a if to_out.empty? == false
+        # iterates through 'to_ent'
         to_ent.each_index { |x|
             self.addHypernym(to_ent[x][0].to_i, to_ent[x][1].to_s.to_i) if to_ent[x][1].length == 1
             if to_ent[x][1].length > 1 then
+                # iterates through 'to_ent' whenever there are multiple destinations
                 to_ent[x][1].each_index { |y|
                     self.addHypernym(to_ent[x][0].to_i, to_ent[x][1][y].to_s.to_i)
                 }
