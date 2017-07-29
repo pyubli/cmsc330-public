@@ -147,7 +147,7 @@ class Hypernyms
         return to_out.to_a if to_out.empty? == false
         # iterates through 'to_ent'
         to_ent.each_index { |x|
-            self.addHypernym(to_ent[x][0].to_i, to_ent[x][1].to_s.to_i) if to_ent[x][1].length == 1
+            self.addHypernym(to_ent[x][0].to_i, to_ent[x][1][0].to_i) if to_ent[x][1].length == 1
             if to_ent[x][1].length > 1 then
                 # iterates through 'to_ent' whenever there are multiple destinations
                 to_ent[x][1].each_index { |y|
@@ -174,7 +174,8 @@ class Hypernyms
 
     # returns an Array or nil
     def lca(id1, id2)
-        raise Exception, "Not implemented"
+        # returns nil if the vertices 'id1' or 'id2' don't exist in the Hypernym
+        return nil if @h.hasVertex?(id1) == false || @h.hasVertex?(id2) == false
     end
 end
 
