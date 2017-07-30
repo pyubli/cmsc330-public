@@ -229,7 +229,24 @@ class CommandParser
         @hypernyms = Hypernyms.new
     end
 
+    # returns a Hash
     def parse(command)
-        raise Exception, "Not implemented"
+        print command, "\n"
+        arr = command.split(' ')
+        print arr, "\n"
+        if command[0].eql?("load") == true then
+            # check for only two parameters at first
+        elsif command[0].eql?("lookup") == true then
+            # check for only one parameter at first
+        elsif command[0].eql?("find") == true then
+            # check for only one parameter at first
+        elsif command[0].eql?("findmany") == true then
+            # check for at least one (or more) parameter(s separated by commas) at first
+        elsif command[0].eql?("lca") == true then
+            # check for only two parameters at first
+        else
+            # case for invalid commands
+            return Hash[:recognized_command => :invalid]
+        end
     end
 end
