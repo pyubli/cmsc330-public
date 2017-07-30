@@ -24,7 +24,7 @@ class Synsets
                 # initial check if line is valid
                 if arr2[0] == "id:" && arr2[2] == "synset:" then
                     # checks if id in each line is a valid id (i.e. a non-negative integer)
-                    if arr[1].to_i.to_s.eql?(arr[1]) == true && arr[1].length.eql?(arr[1].to_i.to_s.length) == true && arr[1].to_i >= 0 then
+                    if arr[1].to_i.to_s.eql?(arr[1]) == true && arr[1].to_i >= 0 then
                         # checks if the synset has the current key
                         if @s.has_key?(arr[1].to_i) == false then
                             # splits the synset into an array delimited by commas (if any)
@@ -130,8 +130,10 @@ class Hypernyms
             file.each_line { |line|
                 arr = line.split(' ')
                 arr2 = line.split(/ /)
+                # checks if each 'line' in 'file' is a legal line
                 if arr2[0] == "from:" && arr2[2] == "to:" then
-                    if arr[1].to_i.to_s.eql?(arr[1]) == true && arr[1].to_i.to_s.length.eql?(arr[1].length) == true && arr[1].to_i >= 0 then
+                    # checks if from is a valid integer
+                    if arr[1].to_i.to_s.eql?(arr[1]) == true && arr[1].to_i >= 0 then
                         bar = arr[3].to_s.split(',')
                         to_ent << Array[arr[1],bar] if to_ent.include?(Array[arr[1],bar]) == false
                     else
@@ -176,6 +178,48 @@ class Hypernyms
     def lca(id1, id2)
         # returns nil if the vertices 'id1' or 'id2' don't exist in the Hypernym
         return nil if @h.hasVertex?(id1) == false || @h.hasVertex?(id2) == false
+        # contains the breadth-first search (BFS) result, a Hash, starting from 'id1'
+        tree1 = @h.bfs(id1)
+        # contains the BFS result, a Hash, starting from 'id2'
+        tree2 = @h.bfs(id2)
+        path = Array.new
+        # iterates through each key in 'tree1'
+        tree1.each_key { |x|
+            # checks if there is a common ancestor in both 'tree1' and 'tree2'
+            if tree2.has_key?(x) == true then
+                path << Array[x, tree1[x]] if tree1[x].to_i >= tree2[x].to_i
+                path << Array[x, tree2[x]] if tree2[x].to_i > tree1[x].to_i
+            end
+        }
+        # returns 'path' if 'path' has nothing (or is nil)
+        return path if path.empty? == true
+        # returns the first common ancestor in 'path' as an Array if path's length is 1
+        return Array[path[0][0]] if path.length == 1
+        # stores the first common ancestor in 'path' as an Array otherwise
+        final = Array[path[0][0]]
+        # stores the length of the first common ancestor
+        sap = path[0][1]
+        # iterates through each index in 'path'
+        path.each_index { |x|
+            # checks for out-of-bounds exceptions
+            if path[x+1].eql?(nil) == false then
+                # checks if 'sap' is indeed the shortest ancestral path (SAP)
+                # case 1 is if 'sap' is greater than the next path length, meaning
+                # 'final' is cleared and the new SAP is stored into 'sap'
+                if sap > path[x+1][1] then
+                    final.clear
+                    final << path[x+1][0]
+                    sap = path[x+1][1]
+                # case 2 is if 'sap' is the same as the next path length, meaning
+                # the next ancestor is added to 'final' and 'sap' is unchanged
+                elsif sap == path[x+1][1] then
+                    final << path[x+1][0]
+                end
+                # case 3 (not present) is if 'sap' is less than the next path length,
+                # meaning that no changes to 'final' or 'sap' will be made
+            end
+        }
+        return final
     end
 end
 

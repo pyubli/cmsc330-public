@@ -54,24 +54,24 @@ class PublicTests < Minitest::Test
     #     assert_equal([1, 4, 7], @hypernyms.load($INVALID_HYPERNYMS))
     # end
 
-    def test_public_hypernyms_lca
-        @hypernyms.load($VALID_HYPERNYMS)
-        assert_equal([3], @hypernyms.lca(0, 1))
-        assert_equal([5], @hypernyms.lca(3, 4))
-    end
+    # def test_public_hypernyms_lca
+    #     @hypernyms.load($VALID_HYPERNYMS)
+    #     assert_equal([3], @hypernyms.lca(0, 1))
+    #     assert_equal([5], @hypernyms.lca(3, 4))
+    # end
 
     # def test_public_hypernyms_lca_nonode
     #     @hypernyms.load($VALID_HYPERNYMS)
     #     assert_equal(nil, @hypernyms.lca(2, 10))
     # end
 
-    # def test_public_commandline
-    #     parser = CommandParser.new
-    #     assert_equal({:recognized_command => :load, :result => true},
-    #                  parser.parse("load #{$VALID_SYNSETS} #{$VALID_HYPERNYMS}"))
-    #     assert_equal({:recognized_command => :invalid},
-    #                  parser.parse("invalid command"))
-    #     assert_equal({:recognized_command => :lookup, :result => ["a"]},
-    #                  parser.parse("lookup 0"))
-    # end
+    def test_public_commandline
+        parser = CommandParser.new
+        assert_equal({:recognized_command => :load, :result => true},
+                     parser.parse("load #{$VALID_SYNSETS} #{$VALID_HYPERNYMS}"))
+        assert_equal({:recognized_command => :invalid},
+                     parser.parse("invalid command"))
+        assert_equal({:recognized_command => :lookup, :result => ["a"]},
+                     parser.parse("lookup 0"))
+    end
 end
