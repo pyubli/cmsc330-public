@@ -234,19 +234,29 @@ class CommandParser
         print command, "\n"
         arr = command.split(' ')
         print arr, "\n"
-        if command[0].eql?("load") == true then
-            # check for only two parameters at first
-        elsif command[0].eql?("lookup") == true then
+        chash = {}
+        if arr[0].eql?("load") == true then
+            chash[:recognized_command] = :load
+            chash[:result] = :error if arr.length.eql?(3) == false
+            chash[:result] = @synsets.load(arr[1]) && @hypernyms.load(arr[2])
+        elsif arr[0].eql?("lookup") == true then
+            chash[:recognized_command] = :lookup
+            chash[:result] = :error if arr.length.eql?(2) == false || arr[1].to_i.to_s.eql?(arr[1]) == false
+            chash[:result] = @synsets.lookup(arr[1])
+        elsif arr[0].eql?("find") == true then
+            chash[:recognized_command] = :find
             # check for only one parameter at first
-        elsif command[0].eql?("find") == true then
-            # check for only one parameter at first
-        elsif command[0].eql?("findmany") == true then
+        elsif arr[0].eql?("findmany") == true then
+            chash[:recognized_command] = :findmany
             # check for at least one (or more) parameter(s separated by commas) at first
-        elsif command[0].eql?("lca") == true then
+        elsif arr[0].eql?("lca") == true then
+            chash[:recognized_command] = :lca
             # check for only two parameters at first
         else
             # case for invalid commands
-            return Hash[:recognized_command => :invalid]
+            chash[:recognized_command] = :invalid
         end
+
+        chash
     end
 end
