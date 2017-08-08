@@ -7,20 +7,16 @@ class Synsets
 
     # Returns an Array or nil
     def load(synsets_file)
-        # Array variable to keep track of valid lines
-        to_ent = Array.new
-        # Array variable to keep track of invalid line numbers
-        to_out = Array.new
-        # int variable to keep track of line numbers
+        # Array variables to keep track of valid & invalid line numbers
+        to_ent, to_out = [], []
+        # int variable to track line numbers
         tracker = 1
         # opens 'synsets_file' in "r"-ead mode
         File.open(synsets_file, "r") { |file|
             # iterates through each line in 'file'
             file.each_line { |line|
-                # creates an array of strings using String class's split function
-                arr = line.split(' ')
-                # creates an array of strings delimited by spaces
-                arr2 = line.split(/ /)
+                # Array variables to store
+                arr, arr2 = line.split(' '), line.split(/ /)
                 # initial check if line is valid
                 if arr2[0] == "id:" && arr2[2] == "synset:" then
                     # checks if id in each line is a valid id (i.e. a non-negative integer)
@@ -29,7 +25,7 @@ class Synsets
                         if @s.has_key?(arr[1].to_i) == false then
                             # splits the synset into an array delimited by commas (if any)
                             bar = arr[3].to_s.split(',')
-                            to_ent << Array[arr[1], bar]
+                            to_ent << [arr[1], bar]
                         end
                     end
                 else
@@ -69,12 +65,10 @@ class Synsets
         return nil if to_find.is_a?(String) == false && to_find.is_a?(Array) == false
         # creates a new Hash using invert to give the original Hash's keys as values and values as keys
         nhash = @s.invert
-        # creates an Array using Hash's keys function
-        words = nhash.keys
-        # creates an Array using Hash's values function
-        ids = nhash.values
+        # creates an Array using Hash's keys and values functions
+        words, ids = nhash.keys, nhash.values
         # Array variable to keep track of the found words with their keys
-        found = Array.new
+        found = []
         i = 0
         # iterates through words Array
         while i < words.length
@@ -89,12 +83,12 @@ class Synsets
                 end
             else
                 # stores the word at index 'i' with its corresponding key (as an Array)
-                found << [words[i][0], Array[ids[i]]]
+                found << [words[i][0], [ids[i]]]
             end
             i += 1
         end
         # Hash variable to store each index of 'found' to return at end
-        fhash = Hash.new
+        fhash = {}
         i = 0
         # iterates through 'to_find'
         while i < to_find.length
@@ -120,22 +114,20 @@ class Hypernyms
 
     # returns an Array or nil
     def load(hypernyms_file)
-        to_ent = Array.new
-        to_out = Array.new
+        to_ent, to_out = [], []
         # int variable to keep track of line numbers
         tracker = 1
         # Opens 'hypernyms_file' in "r"-ead mode
         File.open(hypernyms_file, "r") { |file|
             # iterates through each line in 'file'
             file.each_line { |line|
-                arr = line.split(' ')
-                arr2 = line.split(/ /)
+                arr, arr2 = line.split(' '), line.split(/ /)
                 # checks if each 'line' in 'file' is a legal line
                 if arr2[0] == "from:" && arr2[2] == "to:" then
                     # checks if from is a valid integer
                     if arr[1].to_i.to_s.eql?(arr[1]) == true && arr[1].to_i >= 0 then
                         bar = arr[3].to_s.split(',')
-                        to_ent << Array[arr[1],bar] if to_ent.include?(Array[arr[1],bar]) == false
+                        to_ent << [arr[1],bar] if to_ent.include?([arr[1],bar]) == false
                     else
                         to_out << tracker
                     end
@@ -178,11 +170,9 @@ class Hypernyms
     def lca(id1, id2)
         # returns nil if the vertices 'id1' or 'id2' don't exist in the Hypernym
         return nil if @h.hasVertex?(id1) == false || @h.hasVertex?(id2) == false
-        # contains the breadth-first search (BFS) result, a Hash, starting from 'id1'
-        tree1 = @h.bfs(id1)
-        # contains the BFS result, a Hash, starting from 'id2'
-        tree2 = @h.bfs(id2)
-        path = Array.new
+        # contains the breadth-first search (BFS) result, a Hash, starting from 'id1', and from 'id2'
+        tree1, tree2 = @h.bfs(id1), @h.bfs(id2)
+        path = []
         # iterates through each key in 'tree1'
         tree1.each_key { |x|
             # checks if there is a common ancestor in both 'tree1' and 'tree2'
@@ -194,9 +184,9 @@ class Hypernyms
         # returns 'path' if 'path' has nothing (or is nil)
         return path if path.empty? == true
         # returns the first common ancestor in 'path' as an Array if path's length is 1
-        return Array[path[0][0]] if path.length == 1
+        return [path[0][0]] if path.length == 1
         # stores the first common ancestor in 'path' as an Array otherwise
-        final = Array[path[0][0]]
+        final = [path[0][0]]
         # stores the length of the first common ancestor
         sap = path[0][1]
         # iterates through each index in 'path'
